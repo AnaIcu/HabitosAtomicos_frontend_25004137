@@ -12,9 +12,9 @@ Base de datos: MongoDB Atlas
 
 ## Instalación y ejecución
 1. Clonar el repositorio backend:
-git clone https://github.com/AnaIcu/HabitosAtomicos_25004137
+git clone https://github.com/AnaIcu/HabitosAtomicos_25004137/tree/semana1
 2. Clonar el repositorio frontend:
-git clone https://github.com/AnaIcu/HabitosAtomicos_frontend_25004137
+git clone https://github.com/AnaIcu/HabitosAtomicos_frontend_25004137/tree/semana3
 3. Ejecutar el backend: npm start
 4. Ejecutar el frontend: npm run dev
 El proyecto estará disponible en: http://localhost:5173
