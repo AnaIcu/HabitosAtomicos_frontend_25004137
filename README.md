@@ -15,8 +15,11 @@ Base de datos: MongoDB Atlas
 git clone https://github.com/AnaIcu/HabitosAtomicos_25004137
 2. Clonar el repositorio frontend:
 git clone https://github.com/AnaIcu/HabitosAtomicos_frontend_25004137
-3. Ejecutar el backend: npm start
-4. Ejecutar el frontend: npm run dev
+3. Crear archivo .env con:
+MONGO_URI=dirección base de datos en Mongo
+PORT=3001
+4. Ejecutar el backend: npm start
+5. Ejecutar el frontend: npm run dev
 El proyecto estará disponible en: http://localhost:5173
 
 # React + TypeScript + Vite
