@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchHabits } from "./habitAPI";
-
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { fetchHabits, markAsDone } from "./habitAPI";
 type Habit = {
     _id: string;
     title: string;
@@ -12,16 +11,36 @@ type Habit = {
 }
 
 type HabitState = {
-    habits: Habit[];
+    habits: Habit[],
+    status: Record<string, "idle" | "loading" | "success" | "failed">,
+    error: Record<string, string | null>;
 }
 
-const initialState: HabitState= {
-  habits: []
+const initialState: HabitState = {
+    habits: [],
+    status: {},
+    error: {},
 }
-export const fetchHabitsThunk = createAsyncThunk("habit/fetchHabits", async () =>{
+type markAsDoneThunkParmas = {
+    habitId: string, 
+}
+export const fetchHabitsThunk = createAsyncThunk("habit/fetchHabits", async () => {
     return await fetchHabits();
 });
 
+export const markAsDoneThunk = createAsyncThunk("habit/markAsDone", async ({habitId}:markAsDoneThunkParmas, { rejectWithValue }) => {
+    
+    const responseJson = await markAsDone(habitId);
+    console.log(responseJson);
+    if (responseJson.message.toString() === "Habit marked as done") {
+        return ("Habito marcado como hecho");
+    }else if(responseJson.message.toString() === "Habit restarted"){
+        return rejectWithValue(responseJson.message);
+    }else{
+        return rejectWithValue("Failed to mark habit as done");
+    }
+
+});
 const habitSlice = createSlice({
     name: "habits",
     initialState,
@@ -33,6 +52,12 @@ const habitSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchHabitsThunk.fulfilled, (state, action) => {
             state.habits = action.payload;
+        }).addCase(markAsDoneThunk.fulfilled, (state, action) => {
+            state.status[action.meta.arg.habitId] = "success";
+            state.error[action.meta.arg.habitId] = null;
+        }).addCase(markAsDoneThunk.rejected, (state, action) => {  
+            state.status[action.meta.arg.habitId] = "failed";
+            state.error[action.meta.arg.habitId] = action.payload as string;
         })
     }
 });
