@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchHabits, markAsDone } from "./habitAPI";
+import { fetchHabits, markAsDone, fetchAddHabit } from "./habitAPI";
 type Habit = {
     _id: string;
     title: string;
@@ -11,8 +11,8 @@ type Habit = {
 }
 
 type HabitState = {
-    habits: Habit[],
-    status: Record<string, "idle" | "loading" | "success" | "failed">,
+    habits: Habit[];
+    status: Record<string, "idle" | "loading" | "success" | "failed">;
     error: Record<string, string | null>;
 }
 
@@ -23,14 +23,21 @@ const initialState: HabitState = {
 }
 type markAsDoneThunkParmas = {
     habitId: string, 
+       token: string
 }
-export const fetchHabitsThunk = createAsyncThunk("habit/fetchHabits", async () => {
-    return await fetchHabits();
+type addHabitThunkParmas = {
+    token: string, 
+    title: string,
+    description: string
+}
+export const fetchHabitsThunk = createAsyncThunk("habit/fetchHabits", async (token: string) => {
+    return await fetchHabits(token);
 });
 
-export const markAsDoneThunk = createAsyncThunk("habit/markAsDone", async ({habitId}:markAsDoneThunkParmas, { rejectWithValue }) => {
+export const markAsDoneThunk = createAsyncThunk("habit/markAsDone", async ({habitId, token}:markAsDoneThunkParmas, { rejectWithValue }) => {
     
-    const responseJson = await markAsDone(habitId);
+
+    const responseJson = await markAsDone(habitId, token);
     console.log(responseJson);
     if (responseJson.message.toString() === "Habit marked as done") {
         return ("Habito marcado como hecho");
@@ -39,7 +46,12 @@ export const markAsDoneThunk = createAsyncThunk("habit/markAsDone", async ({habi
     }else{
         return rejectWithValue("Failed to mark habit as done");
     }
-
+    
+});
+export const fetchAddHabitThunk = createAsyncThunk("habit/fetchAddHabit", async ({token, title, description}: addHabitThunkParmas) => {
+    const response = await fetchAddHabit(token, title, description);
+    const responseJson = await response.json();
+    return responseJson;
 });
 const habitSlice = createSlice({
     name: "habits",
@@ -52,13 +64,17 @@ const habitSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchHabitsThunk.fulfilled, (state, action) => {
             state.habits = action.payload;
+            console.log("FETCH HABITS:", action.payload);
         }).addCase(markAsDoneThunk.fulfilled, (state, action) => {
             state.status[action.meta.arg.habitId] = "success";
             state.error[action.meta.arg.habitId] = null;
         }).addCase(markAsDoneThunk.rejected, (state, action) => {  
             state.status[action.meta.arg.habitId] = "failed";
             state.error[action.meta.arg.habitId] = action.payload as string;
-        })
+        }).addCase(fetchAddHabitThunk.fulfilled, (state, action) => {  
+            console.log("action.payload:", action.payload);
+            state.habits.push(action.payload);
+        });;
     }
 });
 
