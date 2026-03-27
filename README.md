@@ -12,9 +12,9 @@ Base de datos: MongoDB Atlas
 
 ## Instalación y ejecución
 1. Clonar el repositorio backend:
-git clone <https://github.com/AnaIcu/HabitosAtomicos_backend_25004137/tree/semana4>
+git clone <https://github.com/AnaIcu/HabitosAtomicos_backend_25004137/tree/semana5>
 2. Clonar el repositorio frontend:
-git clone <https://github.com/AnaIcu/HabitosAtomicos_frontend_25004137/tree/semana4>
+git clone <https://github.com/AnaIcu/HabitosAtomicos_frontend_25004137/tree/semana5>
 3. Crear archivo .env con:
 MONGO_URI=dirección base de datos en Mongo
 PORT=3001
