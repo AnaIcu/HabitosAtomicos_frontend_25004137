@@ -9,7 +9,6 @@ export const fetchHabits = async (token:string) => {
     return response.json();
 };
 
-
 export const markAsDone = async (habitId: string, token: string) => {
     const response = await fetch(`${API_URL}/habits/markasdone/${habitId}`, {
         method: "PATCH",
