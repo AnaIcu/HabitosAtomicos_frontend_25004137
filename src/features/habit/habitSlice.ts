@@ -72,7 +72,8 @@ const habitSlice = createSlice({
             state.error[action.meta.arg.habitId] = action.payload as string;
         }).addCase(fetchAddHabitThunk.fulfilled, (state, action) => {  
             console.log("action.payload:", action.payload);
-            state.habits.push(action.payload.habit);
+            //state.habits.push(action.payload);
+            state.habits.push(action.payload.habit ?? action.payload);
         });;
     }
 });
