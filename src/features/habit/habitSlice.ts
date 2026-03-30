@@ -64,7 +64,6 @@ const habitSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchHabitsThunk.fulfilled, (state, action) => {
             state.habits = action.payload;
-            console.log("FETCH HABITS:", action.payload);
         }).addCase(markAsDoneThunk.fulfilled, (state, action) => {
             state.status[action.meta.arg.habitId] = "success";
             state.error[action.meta.arg.habitId] = null;
